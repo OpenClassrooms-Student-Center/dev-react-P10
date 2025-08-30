@@ -1,6 +1,6 @@
-# API de Gestion de Projets - OC P10
+# OpenClassrooms - Backend Abricot
 
-Cette base de code est l'API REST complète pour l'authentification et la gestion de projets avec système de rôles et de permissions.
+Cette base de code est l'API REST complète pour l'authentification et la gestion de projets avec système de rôles et de permissions pour le projet Abricot.
 
 ## Installation et Démarrage
 
