@@ -3,7 +3,6 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
-import { PrismaClient } from "@prisma/client";
 import dotenv from "dotenv";
 
 // Routes
@@ -11,8 +10,6 @@ import authRoutes from "./routes/authRoutes";
 import projectRoutes from "./routes/projectRoutes";
 import dashboardRoutes from "./routes/dashboardRoutes";
 import { searchUsers } from "./controllers/projectController";
-import taskRoutes from "./routes/taskRoutes";
-import commentRoutes from "./routes/commentRoutes";
 
 // Middleware
 import { authenticateToken } from "./middleware/auth";
@@ -20,11 +17,11 @@ import { authenticateToken } from "./middleware/auth";
 // Swagger
 import { specs } from "./config/swagger";
 
+// Prisma singleton
+import prisma from "./lib/prisma";
+
 // Charger les variables d'environnement
 dotenv.config();
-
-// Initialiser Prisma
-const prisma = new PrismaClient();
 
 // Créer l'application Express
 const app = express();
@@ -104,18 +101,18 @@ app.get("/", (req, res) => {
         removeContributor: "DELETE /projects/:id/contributors/:userId",
       },
       tasks: {
-        create: "POST /projects/:projectId/tasks",
-        getAll: "GET /projects/:projectId/tasks",
-        getOne: "GET /projects/:projectId/tasks/:taskId",
-        update: "PUT /projects/:projectId/tasks/:taskId",
-        delete: "DELETE /projects/:projectId/tasks/:taskId",
+        create: "POST /projects/:id/tasks",
+        getAll: "GET /projects/:id/tasks",
+        getOne: "GET /projects/:id/tasks/:taskId",
+        update: "PUT /projects/:id/tasks/:taskId",
+        delete: "DELETE /projects/:id/tasks/:taskId",
       },
       comments: {
-        create: "POST /projects/:projectId/tasks/:taskId/comments",
-        getAll: "GET /projects/:projectId/tasks/:taskId/comments",
-        getOne: "GET /projects/:projectId/tasks/:taskId/comments/:commentId",
-        update: "PUT /projects/:projectId/tasks/:taskId/comments/:commentId",
-        delete: "DELETE /projects/:projectId/tasks/:taskId/comments/:commentId",
+        create: "POST /projects/:id/tasks/:taskId/comments",
+        getAll: "GET /projects/:id/tasks/:taskId/comments",
+        getOne: "GET /projects/:id/tasks/:taskId/comments/:commentId",
+        update: "PUT /projects/:id/tasks/:taskId/comments/:commentId",
+        delete: "DELETE /projects/:id/tasks/:taskId/comments/:commentId",
       },
       health: "GET /health",
     },

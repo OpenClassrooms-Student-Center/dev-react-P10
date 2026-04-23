@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
 import { Role } from "../types";
-
-const prisma = new PrismaClient();
+import prisma from "../lib/prisma";
 
 /**
  * Vérifie si un utilisateur a accès à un projet

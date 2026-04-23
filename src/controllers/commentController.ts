@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../lib/prisma";
 import {
   CreateCommentRequest,
   UpdateCommentRequest,
@@ -17,21 +17,17 @@ import {
   sendServerError,
 } from "../utils/response";
 
-const prisma = new PrismaClient();
-
 /**
  * Créer un nouveau commentaire sur une tâche
- * POST /projects/:projectId/tasks/:taskId/comments
+ * POST /projects/:id/tasks/:taskId/comments
  */
 export const createComment = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const projectId = req.params.id || req.params.projectId;
+    const projectId = req.params.id;
     const { taskId } = req.params;
-    console.log("Paramètres reçus dans createComment:", req.params);
-    console.log("projectId:", projectId, "taskId:", taskId);
     const { content }: CreateCommentRequest = req.body;
     const authReq = req as AuthRequest;
 
@@ -104,14 +100,14 @@ export const createComment = async (
 
 /**
  * Récupérer tous les commentaires d'une tâche
- * GET /projects/:projectId/tasks/:taskId/comments
+ * GET /projects/:id/tasks/:taskId/comments
  */
 export const getComments = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const projectId = req.params.id || req.params.projectId;
+    const projectId = req.params.id;
     const { taskId } = req.params;
     const authReq = req as AuthRequest;
 
@@ -170,14 +166,14 @@ export const getComments = async (
 
 /**
  * Récupérer un commentaire spécifique
- * GET /projects/:projectId/tasks/:taskId/comments/:commentId
+ * GET /projects/:id/tasks/:taskId/comments/:commentId
  */
 export const getComment = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const projectId = req.params.id || req.params.projectId;
+    const projectId = req.params.id;
     const { taskId, commentId } = req.params;
     const authReq = req as AuthRequest;
 
@@ -233,14 +229,14 @@ export const getComment = async (
 
 /**
  * Mettre à jour un commentaire
- * PUT /projects/:projectId/tasks/:taskId/comments/:commentId
+ * PUT /projects/:id/tasks/:taskId/comments/:commentId
  */
 export const updateComment = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const projectId = req.params.id || req.params.projectId;
+    const projectId = req.params.id;
     const { taskId, commentId } = req.params;
     const { content }: UpdateCommentRequest = req.body;
     const authReq = req as AuthRequest;
@@ -329,14 +325,14 @@ export const updateComment = async (
 
 /**
  * Supprimer un commentaire
- * DELETE /projects/:projectId/tasks/:taskId/comments/:commentId
+ * DELETE /projects/:id/tasks/:taskId/comments/:commentId
  */
 export const deleteComment = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const projectId = req.params.id || req.params.projectId;
+    const projectId = req.params.id;
     const { taskId, commentId } = req.params;
     const authReq = req as AuthRequest;
 
