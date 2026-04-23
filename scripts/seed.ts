@@ -33,39 +33,39 @@ interface SeedComment {
 
 // Données de test
 const users: SeedUser[] = [
-  { email: "alice@example.com", name: "Alice Martin", password: "password123" },
-  { email: "bob@example.com", name: "Bob Dupont", password: "password123" },
+  { email: "alice@example.com", name: "Alice Martin", password: "P@ssword123" },
+  { email: "bob@example.com", name: "Bob Dupont", password: "P@ssword123" },
   {
     email: "caroline@example.com",
     name: "Caroline Leroy",
     password: "password123",
   },
-  { email: "david@example.com", name: "David Moreau", password: "password123" },
-  { email: "emma@example.com", name: "Emma Rousseau", password: "password123" },
+  { email: "david@example.com", name: "David Moreau", password: "P@ssword123" },
+  { email: "emma@example.com", name: "Emma Rousseau", password: "P@ssword123" },
   {
     email: "francois@example.com",
     name: "François Dubois",
-    password: "password123",
+    password: "P@ssword123",
   },
   {
     email: "gabrielle@example.com",
     name: "Gabrielle Simon",
-    password: "password123",
+    password: "P@ssword123",
   },
   {
     email: "henri@example.com",
     name: "Henri Laurent",
-    password: "password123",
+    password: "P@ssword123",
   },
   {
     email: "isabelle@example.com",
     name: "Isabelle Petit",
-    password: "password123",
+    password: "P@ssword123",
   },
   {
     email: "jacques@example.com",
     name: "Jacques Durand",
-    password: "password123",
+    password: "P@ssword123",
   },
 ];
 

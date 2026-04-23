@@ -3,21 +3,22 @@
 Cette base de code est l'API REST complète pour l'authentification et la gestion de projets avec système de rôles et de permissions pour le projet Abricot.
 
 ## Installation et Démarrage
+1. Renommer le fichier `.env.example` en `.env` et changer la valeur de `JWT_SECRET`
 
-1. Installer les dépendances :
+2. Installer les dépendances :
 
 ```bash
 npm install
 ```
 
-2. Configurer la base de données :
+3. Configurer la base de données :
 
 ```bash
 npx prisma generate
-npx prisma db push
+npx prisma migrate deploy
 ```
 
-3. Démarrer le serveur :
+4. Démarrer le serveur :
 
 ```bash
 npm run dev
@@ -79,7 +80,7 @@ Le script crée les éléments suivants :
 - **Isabelle Petit** (isabelle@example.com)
 - **Jacques Durand** (jacques@example.com)
 
-**Mot de passe pour tous les utilisateurs :** `password123`
+**Mot de passe pour tous les utilisateurs :** `P@ssword123`
 
 ## Système de Rôles
 

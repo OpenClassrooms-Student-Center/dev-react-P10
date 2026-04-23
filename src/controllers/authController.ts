@@ -7,20 +7,20 @@ import {
   UpdateProfileRequest,
   UpdatePasswordRequest,
   AuthRequest,
-} from "../types";
+} from "@/types";
 import {
   validateRegisterData,
   validateLoginData,
   validateUpdateProfileData,
   validateUpdatePasswordData,
-} from "../utils/validation";
-import { generateToken } from "../utils/jwt";
+} from "@/utils/validation";
+import { generateToken } from "@/utils/jwt";
 import {
   sendSuccess,
   sendError,
   sendValidationError,
   sendServerError,
-} from "../utils/response";
+} from "@/utils/response";
 
 const prisma = new PrismaClient();
 
@@ -48,9 +48,9 @@ const prisma = new PrismaClient();
  *                 example: "user@example.com"
  *               password:
  *                 type: string
- *                 minLength: 6
- *                 description: Mot de passe (minimum 6 caractères)
- *                 example: "password123"
+ *                 minLength: 8
+ *                 description: Mot de passe (minimum 8 caractères, une majuscule, un charactère spécial)
+ *                 example: "Password123_"
  *               name:
  *                 type: string
  *                 description: Nom de l'utilisateur

@@ -1,4 +1,4 @@
-import { ValidationError } from "../types";
+import { ValidationError } from "@/types";
 
 /**
  * Valide un email
@@ -12,7 +12,9 @@ export const isValidEmail = (email: string): boolean => {
 
 /**
  * Valide un mot de passe
+ * Au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre un caractère spécial : @$!%*?&
  * @param password - Le mot de passe à valider
+ *
  * @returns true si le mot de passe est valide, false sinon
  */
 export const isValidPassword = (password: string): boolean => {
@@ -341,7 +343,7 @@ export const validateCreateTaskData = (data: {
       });
     } else {
       data.assigneeIds.forEach((userId, index) => {
-        if (!userId || typeof userId !== "string") {
+        if (!userId) {
           errors.push({
             field: `assigneeIds[${index}]`,
             message: "L'ID de l'utilisateur assigné est invalide",
@@ -440,7 +442,7 @@ export const validateUpdateTaskData = (data: {
       });
     } else {
       data.assigneeIds.forEach((userId, index) => {
-        if (!userId || typeof userId !== "string") {
+        if (!userId) {
           errors.push({
             field: `assigneeIds[${index}]`,
             message: "L'ID de l'utilisateur assigné est invalide",
