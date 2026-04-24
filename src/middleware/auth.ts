@@ -1,10 +1,8 @@
 import { Response, NextFunction } from "express";
-import { PrismaClient } from "@prisma/client";
 import { AuthRequest } from "../types";
 import { verifyToken, extractTokenFromHeader } from "../utils/jwt";
 import { sendAuthError } from "../utils/response";
-
-const prisma = new PrismaClient();
+import prisma from "../lib/prisma";
 
 /**
  * Middleware d'authentification pour vérifier les tokens JWT

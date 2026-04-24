@@ -12,12 +12,14 @@ export const isValidEmail = (email: string): boolean => {
 
 /**
  * Valide un mot de passe
+ * Au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre un caractère spécial : @$!%*?&
  * @param password - Le mot de passe à valider
+ *
  * @returns true si le mot de passe est valide, false sinon
  */
 export const isValidPassword = (password: string): boolean => {
-  // Au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/;
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   return passwordRegex.test(password);
 };
 
@@ -28,7 +30,7 @@ export const isValidPassword = (password: string): boolean => {
  */
 export const isValidDate = (dateString: string): boolean => {
   const date = new Date(dateString);
-  return !isNaN(date.getTime()) && dateString === date.toISOString();
+  return !isNaN(date.getTime());
 };
 
 /**
@@ -57,7 +59,7 @@ export const validateRegisterData = (data: {
     errors.push({
       field: "password",
       message:
-        "Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule et un chiffre",
+        "Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial (@$!%*?&)",
     });
   }
 
@@ -341,7 +343,7 @@ export const validateCreateTaskData = (data: {
       });
     } else {
       data.assigneeIds.forEach((userId, index) => {
-        if (!userId || typeof userId !== "string") {
+        if (!userId) {
           errors.push({
             field: `assigneeIds[${index}]`,
             message: "L'ID de l'utilisateur assigné est invalide",
@@ -440,7 +442,7 @@ export const validateUpdateTaskData = (data: {
       });
     } else {
       data.assigneeIds.forEach((userId, index) => {
-        if (!userId || typeof userId !== "string") {
+        if (!userId) {
           errors.push({
             field: `assigneeIds[${index}]`,
             message: "L'ID de l'utilisateur assigné est invalide",

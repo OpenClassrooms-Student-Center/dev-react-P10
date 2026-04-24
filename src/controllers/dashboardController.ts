@@ -1,9 +1,7 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../lib/prisma";
 import { AuthRequest } from "../types";
 import { sendSuccess, sendError, sendServerError } from "../utils/response";
-
-const prisma = new PrismaClient();
 
 /**
  * @swagger

@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-
-const prisma = new PrismaClient();
+import prisma from "../src/lib/prisma";
 
 // Types pour les données de test
 interface SeedUser {
@@ -13,7 +11,7 @@ interface SeedUser {
 interface SeedProject {
   name: string;
   description: string;
-  ownerId: string;
+  ownerEmail: string;
   contributors: string[];
 }
 
@@ -23,6 +21,7 @@ interface SeedTask {
   status: "TODO" | "IN_PROGRESS" | "DONE" | "CANCELLED";
   priority: "LOW" | "MEDIUM" | "HIGH";
   dueDate: Date;
+  projectName: string;
   assignees: string[];
 }
 
@@ -33,39 +32,39 @@ interface SeedComment {
 
 // Données de test
 const users: SeedUser[] = [
-  { email: "alice@example.com", name: "Alice Martin", password: "password123" },
-  { email: "bob@example.com", name: "Bob Dupont", password: "password123" },
+  { email: "alice@example.com", name: "Alice Martin", password: "P@ssword123" },
+  { email: "bob@example.com", name: "Bob Dupont", password: "P@ssword123" },
   {
     email: "caroline@example.com",
     name: "Caroline Leroy",
-    password: "password123",
+    password: "P@ssword123",
   },
-  { email: "david@example.com", name: "David Moreau", password: "password123" },
-  { email: "emma@example.com", name: "Emma Rousseau", password: "password123" },
+  { email: "david@example.com", name: "David Moreau", password: "P@ssword123" },
+  { email: "emma@example.com", name: "Emma Rousseau", password: "P@ssword123" },
   {
     email: "francois@example.com",
     name: "François Dubois",
-    password: "password123",
+    password: "P@ssword123",
   },
   {
     email: "gabrielle@example.com",
     name: "Gabrielle Simon",
-    password: "password123",
+    password: "P@ssword123",
   },
   {
     email: "henri@example.com",
     name: "Henri Laurent",
-    password: "password123",
+    password: "P@ssword123",
   },
   {
     email: "isabelle@example.com",
     name: "Isabelle Petit",
-    password: "password123",
+    password: "P@ssword123",
   },
   {
     email: "jacques@example.com",
     name: "Jacques Durand",
-    password: "password123",
+    password: "P@ssword123",
   },
 ];
 
@@ -74,7 +73,7 @@ const projects: SeedProject[] = [
     name: "Application E-commerce",
     description:
       "Développement d'une plateforme de vente en ligne moderne avec paiement sécurisé et gestion des stocks.",
-    ownerId: "", // Sera rempli après création des utilisateurs
+    ownerEmail: "alice@example.com",
     contributors: [
       "bob@example.com",
       "caroline@example.com",
@@ -85,9 +84,8 @@ const projects: SeedProject[] = [
     name: "Système de Gestion RH",
     description:
       "Application web pour la gestion des ressources humaines : congés, évaluations, planning.",
-    ownerId: "",
+    ownerEmail: "emma@example.com",
     contributors: [
-      "emma@example.com",
       "francois@example.com",
       "gabrielle@example.com",
     ],
@@ -96,22 +94,22 @@ const projects: SeedProject[] = [
     name: "Application Mobile Fitness",
     description:
       "App mobile pour le suivi d'entraînement, nutrition et objectifs fitness personnalisés.",
-    ownerId: "",
-    contributors: ["henri@example.com", "isabelle@example.com"],
+    ownerEmail: "henri@example.com",
+    contributors: ["isabelle@example.com"],
   },
   {
     name: "Plateforme de Formation",
     description:
       "Système de gestion de cours en ligne avec vidéos, quiz et suivi des progrès.",
-    ownerId: "",
-    contributors: ["jacques@example.com", "alice@example.com"],
+    ownerEmail: "jacques@example.com",
+    contributors: ["alice@example.com"],
   },
   {
     name: "Dashboard Analytics",
     description:
       "Interface de visualisation de données avec graphiques interactifs et rapports automatisés.",
-    ownerId: "",
-    contributors: ["bob@example.com", "emma@example.com", "henri@example.com"],
+    ownerEmail: "bob@example.com",
+    contributors: ["emma@example.com", "henri@example.com"],
   },
 ];
 
@@ -124,6 +122,7 @@ const tasks: SeedTask[] = [
     status: "DONE",
     priority: "HIGH",
     dueDate: new Date("2024-01-15"),
+    projectName: "Application E-commerce",
     assignees: ["bob@example.com", "caroline@example.com"],
   },
   {
@@ -133,6 +132,7 @@ const tasks: SeedTask[] = [
     status: "IN_PROGRESS",
     priority: "HIGH",
     dueDate: new Date("2024-02-01"),
+    projectName: "Application E-commerce",
     assignees: ["david@example.com"],
   },
   {
@@ -142,6 +142,7 @@ const tasks: SeedTask[] = [
     status: "TODO",
     priority: "MEDIUM",
     dueDate: new Date("2024-02-15"),
+    projectName: "Application E-commerce",
     assignees: ["alice@example.com", "caroline@example.com"],
   },
   {
@@ -150,6 +151,7 @@ const tasks: SeedTask[] = [
     status: "TODO",
     priority: "HIGH",
     dueDate: new Date("2024-02-28"),
+    projectName: "Application E-commerce",
     assignees: ["bob@example.com"],
   },
   {
@@ -159,6 +161,7 @@ const tasks: SeedTask[] = [
     status: "TODO",
     priority: "MEDIUM",
     dueDate: new Date("2024-03-10"),
+    projectName: "Application E-commerce",
     assignees: ["david@example.com", "caroline@example.com"],
   },
 
@@ -170,6 +173,7 @@ const tasks: SeedTask[] = [
     status: "IN_PROGRESS",
     priority: "HIGH",
     dueDate: new Date("2024-01-20"),
+    projectName: "Système de Gestion RH",
     assignees: ["emma@example.com", "francois@example.com"],
   },
   {
@@ -179,6 +183,7 @@ const tasks: SeedTask[] = [
     status: "TODO",
     priority: "MEDIUM",
     dueDate: new Date("2024-02-05"),
+    projectName: "Système de Gestion RH",
     assignees: ["gabrielle@example.com"],
   },
   {
@@ -188,6 +193,7 @@ const tasks: SeedTask[] = [
     status: "TODO",
     priority: "LOW",
     dueDate: new Date("2024-02-20"),
+    projectName: "Système de Gestion RH",
     assignees: ["emma@example.com"],
   },
 
@@ -198,6 +204,7 @@ const tasks: SeedTask[] = [
     status: "DONE",
     priority: "HIGH",
     dueDate: new Date("2024-01-10"),
+    projectName: "Application Mobile Fitness",
     assignees: ["henri@example.com"],
   },
   {
@@ -207,6 +214,7 @@ const tasks: SeedTask[] = [
     status: "IN_PROGRESS",
     priority: "HIGH",
     dueDate: new Date("2024-01-25"),
+    projectName: "Application Mobile Fitness",
     assignees: ["isabelle@example.com", "henri@example.com"],
   },
   {
@@ -216,6 +224,7 @@ const tasks: SeedTask[] = [
     status: "TODO",
     priority: "MEDIUM",
     dueDate: new Date("2024-02-10"),
+    projectName: "Application Mobile Fitness",
     assignees: ["henri@example.com"],
   },
 
@@ -227,6 +236,7 @@ const tasks: SeedTask[] = [
     status: "DONE",
     priority: "HIGH",
     dueDate: new Date("2024-01-05"),
+    projectName: "Plateforme de Formation",
     assignees: ["jacques@example.com"],
   },
   {
@@ -236,6 +246,7 @@ const tasks: SeedTask[] = [
     status: "IN_PROGRESS",
     priority: "HIGH",
     dueDate: new Date("2024-01-30"),
+    projectName: "Plateforme de Formation",
     assignees: ["alice@example.com", "jacques@example.com"],
   },
   {
@@ -245,6 +256,7 @@ const tasks: SeedTask[] = [
     status: "TODO",
     priority: "MEDIUM",
     dueDate: new Date("2024-02-15"),
+    projectName: "Plateforme de Formation",
     assignees: ["alice@example.com"],
   },
 
@@ -256,6 +268,7 @@ const tasks: SeedTask[] = [
     status: "DONE",
     priority: "HIGH",
     dueDate: new Date("2024-01-08"),
+    projectName: "Dashboard Analytics",
     assignees: ["bob@example.com"],
   },
   {
@@ -265,6 +278,7 @@ const tasks: SeedTask[] = [
     status: "IN_PROGRESS",
     priority: "HIGH",
     dueDate: new Date("2024-01-22"),
+    projectName: "Dashboard Analytics",
     assignees: ["emma@example.com", "henri@example.com"],
   },
   {
@@ -274,6 +288,7 @@ const tasks: SeedTask[] = [
     status: "TODO",
     priority: "MEDIUM",
     dueDate: new Date("2024-02-08"),
+    projectName: "Dashboard Analytics",
     assignees: ["bob@example.com"],
   },
 ];
@@ -429,15 +444,24 @@ async function seed() {
     const createdProjects: { [name: string]: string } = {};
 
     for (const projectData of projects) {
+      const ownerId = createdUsers[projectData.ownerEmail];
+      if (!ownerId) {
+        throw new Error(
+          `Owner introuvable pour le projet ${projectData.name}: ${projectData.ownerEmail}`
+        );
+      }
+
       const project = await prisma.project.create({
         data: {
           name: projectData.name,
           description: projectData.description,
-          ownerId: createdUsers[projectData.ownerId || "alice@example.com"],
+          ownerId,
         },
       });
       createdProjects[projectData.name] = project.id;
-      console.log(`✅ Projet créé: ${projectData.name}`);
+      console.log(
+        `✅ Projet créé: ${projectData.name} (owner: ${projectData.ownerEmail})`
+      );
 
       // Ajouter les contributeurs
       for (const contributorEmail of projectData.contributors) {
@@ -456,13 +480,19 @@ async function seed() {
 
     // Créer les tâches
     console.log("📋 Création des tâches...");
-    const projectNames = Object.keys(createdProjects);
     let taskIndex = 0;
 
     for (const taskData of tasks) {
-      // Distribuer les tâches entre les projets
-      const projectName = projectNames[taskIndex % projectNames.length];
-      const projectId = createdProjects[projectName];
+      const projectId = createdProjects[taskData.projectName];
+      if (!projectId) {
+        throw new Error(
+          `Projet introuvable pour la tâche "${taskData.title}": ${taskData.projectName}`
+        );
+      }
+
+      // Le créateur de la tâche est l'owner du projet
+      const projectData = projects.find((p) => p.name === taskData.projectName);
+      const creatorId = createdUsers[projectData!.ownerEmail];
 
       const task = await prisma.task.create({
         data: {
@@ -471,8 +501,8 @@ async function seed() {
           status: taskData.status,
           priority: taskData.priority,
           dueDate: taskData.dueDate,
-          projectId: projectId,
-          creatorId: createdUsers["alice@example.com"], // Utiliser Alice comme créateur par défaut
+          projectId,
+          creatorId,
         },
       });
       console.log(`✅ Tâche créée: ${taskData.title}`);
@@ -496,13 +526,8 @@ async function seed() {
         const commentIndex = (taskIndex * commentCount + i) % comments.length;
         const commentData = comments[commentIndex];
 
-        // Sélectionner un auteur aléatoire parmi les assignés ou le propriétaire du projet
-        const possibleAuthors = [...taskData.assignees];
-        const project = projects.find((p) => p.name === projectName);
-        if (project) {
-          possibleAuthors.push(project.ownerId || "alice@example.com");
-        }
-
+        // Sélectionner un auteur aléatoire parmi les assignés ou l'owner du projet
+        const possibleAuthors = [...taskData.assignees, projectData!.ownerEmail];
         const authorEmail =
           possibleAuthors[Math.floor(Math.random() * possibleAuthors.length)];
 

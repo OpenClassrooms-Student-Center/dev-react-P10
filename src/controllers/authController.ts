@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../lib/prisma";
 import {
   RegisterRequest,
   LoginRequest,
@@ -21,8 +21,6 @@ import {
   sendValidationError,
   sendServerError,
 } from "../utils/response";
-
-const prisma = new PrismaClient();
 
 /**
  * @swagger
@@ -48,9 +46,9 @@ const prisma = new PrismaClient();
  *                 example: "user@example.com"
  *               password:
  *                 type: string
- *                 minLength: 6
- *                 description: Mot de passe (minimum 6 caractères)
- *                 example: "password123"
+ *                 minLength: 8
+ *                 description: Mot de passe (minimum 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial parmi @$!%*?&)
+ *                 example: "Password123!"
  *               name:
  *                 type: string
  *                 description: Nom de l'utilisateur
@@ -178,7 +176,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
  *               password:
  *                 type: string
  *                 description: Mot de passe
- *                 example: "password123"
+ *                 example: "Password123!"
  *     responses:
  *       200:
  *         description: Connexion réussie
@@ -236,8 +234,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     // Vérifier le mot de passe
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    console.log("password", password);
-    console.log("user.password", user.password);
     if (!isPasswordValid) {
       sendError(
         res,

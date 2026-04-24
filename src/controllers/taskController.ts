@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../lib/prisma";
 import { CreateTaskRequest, UpdateTaskRequest, AuthRequest } from "../types";
 import {
   validateCreateTaskData,
@@ -23,21 +23,16 @@ import {
 } from "../utils/taskAssignments";
 import { getTaskComments } from "../utils/taskComments";
 
-const prisma = new PrismaClient();
-
 /**
  * Créer une nouvelle tâche
- * POST /projects/:projectId/tasks
+ * POST /projects/:id/tasks
  */
 export const createTask = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const projectId = req.params.projectId || req.params.id;
-    console.log("Paramètres reçus:", req.params);
-    console.log("projectId extrait:", projectId);
-    console.log("Tous les paramètres:", Object.keys(req.params));
+    const projectId = req.params.id;
 
     if (!projectId || typeof projectId !== "string") {
       sendError(res, "ID de projet invalide", "INVALID_PROJECT_ID", 400);
@@ -130,13 +125,9 @@ export const createTask = async (
       creatorId: authReq.user.id,
     };
 
-    console.log("Création de tâche avec les données:", taskData);
-
     const task = await prisma.task.create({
       data: taskData,
     });
-
-    console.log("Tâche créée:", task);
 
     // Ajouter les assignations si fournies
     if (assigneeIds && assigneeIds.length > 0) {
@@ -304,7 +295,7 @@ export const getTasks = async (req: Request, res: Response): Promise<void> => {
 
 /**
  * Récupérer une tâche spécifique
- * GET /projects/:projectId/tasks/:taskId
+ * GET /projects/:id/tasks/:taskId
  */
 export const getTask = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -372,7 +363,7 @@ export const getTask = async (req: Request, res: Response): Promise<void> => {
 
 /**
  * Mettre à jour une tâche
- * PUT /projects/:projectId/tasks/:taskId
+ * PUT /projects/:id/tasks/:taskId
  */
 export const updateTask = async (
   req: Request,
@@ -527,7 +518,7 @@ export const updateTask = async (
 
 /**
  * Supprimer une tâche
- * DELETE /projects/:projectId/tasks/:taskId
+ * DELETE /projects/:id/tasks/:taskId
  */
 export const deleteTask = async (
   req: Request,
